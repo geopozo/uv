@@ -127,6 +127,12 @@ pub struct Options {
     pub default_groups: Option<serde::de::IgnoredAny>,
 
     #[cfg_attr(feature = "schemars", schemars(skip))]
+    pub dev_requires_python: Option<serde::de::IgnoredAny>,
+
+    #[cfg_attr(feature = "schemars", schemars(skip))]
+    pub explicit_groups: Option<serde::de::IgnoredAny>,
+
+    #[cfg_attr(feature = "schemars", schemars(skip))]
     pub managed: Option<serde::de::IgnoredAny>,
 
     #[cfg_attr(feature = "schemars", schemars(skip))]
@@ -1694,6 +1700,8 @@ pub struct OptionsWire {
     managed: Option<serde::de::IgnoredAny>,
     r#package: Option<serde::de::IgnoredAny>,
     default_groups: Option<serde::de::IgnoredAny>,
+    dev_requires_python: Option<serde::de::IgnoredAny>,
+    explicit_groups: Option<serde::de::IgnoredAny>,
     dev_dependencies: Option<serde::de::IgnoredAny>,
 
     // Build backend
@@ -1755,6 +1763,8 @@ impl From<OptionsWire> for Options {
             workspace,
             sources,
             default_groups,
+            dev_requires_python,
+            explicit_groups,
             dev_dependencies,
             managed,
             package,
@@ -1824,6 +1834,8 @@ impl From<OptionsWire> for Options {
             sources,
             dev_dependencies,
             default_groups,
+            dev_requires_python,
+            explicit_groups,
             managed,
             package,
         }

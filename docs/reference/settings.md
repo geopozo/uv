@@ -123,6 +123,31 @@ dev-dependencies = ["ruff==0.5.0"]
 
 ---
 
+### [`dev-requires-python`](#dev-requires-python) {: #dev-requires-python }
+
+The python version to use if the "dev" group is included.
+
+Development requirements and runtime requirements may be different. Setting a specific
+python-version for a development workflow allows us to a) use tools requiring newer
+python while b) supporting users some number of versions behind.
+
+When `--dev` is passed, we will override the `project.requires-python` value. This prevents
+conflicts if the project value is not compatible with a `--dev` dependency. If this value
+is present, it is very likely you need to add "dev" to `tool.uv.explicit-groups`.
+
+**Default value**: ``
+
+**Type**: `str`
+
+**Example usage**:
+
+```toml title="pyproject.toml"
+[tool.uv]
+dev-requires-path = ">=3.11.0"
+```
+
+---
+
 ### [`environments`](#environments) {: #environments }
 
 A list of supported environments against which to resolve dependencies.
@@ -144,6 +169,30 @@ These environments will also respected when `uv pip compile` is invoked with the
 [tool.uv]
 # Resolve for macOS, but not for Linux or Windows.
 environments = ["sys_platform == 'darwin'"]
+```
+
+---
+
+### [`explicit-groups`](#explicit-groups) {: #explicit-groups }
+
+Groups that will not be resolved if they are not included
+
+Certain groups should only be resolved into lock files if they are necessary and
+intentionally included. For example, if the group includes private repositories which
+simply won't resolve in many instances.
+
+uv normally resolves all dependencies even if they are not included, but this option will
+override that behavior.
+
+**Default value**: `[]`
+
+**Type**: `list[str]`
+
+**Example usage**:
+
+```toml title="pyproject.toml"
+[tool.uv]
+explicit-groups = ["dev"]
 ```
 
 ---

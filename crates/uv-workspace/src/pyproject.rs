@@ -380,6 +380,48 @@ pub struct ToolUv {
     )]
     pub default_groups: Option<Vec<GroupName>>,
 
+    /// The python version to use if the "dev" group is included.
+    ///
+    /// Development requirements and runtime requirements may be different. Setting a specific
+    /// python-version for a development workflow allows us to a) use tools requiring newer
+    /// python while b) supporting users some number of versions behind.
+    ///
+    /// When `--dev` is passed, we will override the `project.requires-python` value. This prevents
+    /// conflicts if the project value is not compatible with a `--dev` dependency. If this value
+    /// is present, it is very likely you need to add "dev" to `tool.uv.explicit-groups`.
+    #[cfg_attr(
+        feature = "schemars",
+        schemars(
+            with = "Option<String>",
+            description = "PEP 440-style version specifiers, e.g., `>=1.5.0`"
+        )
+    )]
+    #[option(
+        default = r#""#,
+        value_type = "str",
+        example = r#"
+            dev-requires-path = ">=3.11.0"
+        "#
+    )]
+    pub dev_requires_python: Option<VersionSpecifiers>,
+
+    /// Groups that will not be resolved if they are not included
+    ///
+    /// Certain groups should only be resolved into lock files if they are necessary and
+    /// intentionally included. For example, if the group includes private repositories which
+    /// simply won't resolve in many instances.
+    ///
+    /// uv normally resolves all dependencies even if they are not included, but this option will
+    /// override that behavior.
+    #[option(
+        default = r#"[]"#,
+        value_type = "list[str]",
+        example = r#"
+            explicit-groups = ["dev"]
+        "#
+    )]
+    pub explicit_groups: Option<Vec<GroupName>>,
+
     /// The project's development dependencies.
     ///
     /// Development dependencies will be installed by default in `uv run` and `uv sync`, but will
